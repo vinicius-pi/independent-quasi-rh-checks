@@ -1,0 +1,217 @@
+{
+  "source_commit": "adc7f1241b42e322a6451854ab7e4b4c146bf78a",
+  "scope": "finite arithmetic and Gaussian Poisson spot-checks only",
+  "prime_cases": [
+    {
+      "p": [
+        1,
+        3
+      ],
+      "norm": 7,
+      "gamma2_cubic_residual": 3.0369216844827586e-15,
+      "quadratic_gauss_residual": 7.28021923224409e-16
+    },
+    {
+      "p": [
+        4,
+        3
+      ],
+      "norm": 13,
+      "gamma2_cubic_residual": 1.887379141862766e-15,
+      "quadratic_gauss_residual": 2.4049357104613274e-16
+    },
+    {
+      "p": [
+        -2,
+        3
+      ],
+      "norm": 19,
+      "gamma2_cubic_residual": 1.7377739072730912e-15,
+      "quadratic_gauss_residual": 3.777850517853845e-16
+    },
+    {
+      "p": [
+        1,
+        6
+      ],
+      "norm": 31,
+      "gamma2_cubic_residual": 6.162737906427329e-15,
+      "quadratic_gauss_residual": 1.3352859867647317e-15
+    },
+    {
+      "p": [
+        7,
+        3
+      ],
+      "norm": 37,
+      "gamma2_cubic_residual": 1.1657341758564144e-15,
+      "quadratic_gauss_residual": 1.797817478174945e-15
+    }
+  ],
+  "composite_cases": [
+    {
+      "p": [
+        1,
+        3
+      ],
+      "r": [
+        4,
+        3
+      ],
+      "norm": 91,
+      "reciprocity_sign": -1,
+      "omitted_reciprocity_residual": 1.999999999999999,
+      "residuals": {
+        "gamma2_cubic": 3.0303191209571215e-15,
+        "gauss_jacobi": 3.885780586188048e-15,
+        "G_reciprocity": 3.074951688523675e-15,
+        "a_crt": 2.44312138127538e-15,
+        "reciprocity_is_sign": 2.8844440295753455e-16
+      }
+    },
+    {
+      "p": [
+        1,
+        3
+      ],
+      "r": [
+        7,
+        3
+      ],
+      "norm": 259,
+      "reciprocity_sign": 1,
+      "omitted_reciprocity_residual": 5.049989500147305e-15,
+      "residuals": {
+        "gamma2_cubic": 2.5641345258133027e-14,
+        "gauss_jacobi": 1.311755636356609e-14,
+        "G_reciprocity": 5.049989500147305e-15,
+        "a_crt": 8.333331360430665e-15,
+        "reciprocity_is_sign": 0.0
+      }
+    },
+    {
+      "p": [
+        4,
+        3
+      ],
+      "r": [
+        -2,
+        3
+      ],
+      "norm": 247,
+      "reciprocity_sign": -1,
+      "omitted_reciprocity_residual": 1.9999999999999984,
+      "residuals": {
+        "gamma2_cubic": 1.716587549445839e-15,
+        "gauss_jacobi": 1.0934428697813141e-15,
+        "G_reciprocity": 1.072098405376252e-15,
+        "a_crt": 1.2412670766236366e-15,
+        "reciprocity_is_sign": 4.440892098500625e-16
+      }
+    }
+  ],
+  "masked_poisson_cases": [
+    {
+      "modulus": [
+        7,
+        3
+      ],
+      "modulus_norm": 37,
+      "excluded_prime": [
+        1,
+        3
+      ],
+      "excluded_norm": 7,
+      "H": 4.0,
+      "lhs": [
+        2.590563099178109,
+        0.285014750643814
+      ],
+      "residual": 6.1464657966265474e-15,
+      "truncation_tail_bound": 1.2650830730245985e-76,
+      "omitted_mask_residual": 0.024574744050967552
+    },
+    {
+      "modulus": [
+        7,
+        3
+      ],
+      "modulus_norm": 37,
+      "excluded_prime": [
+        4,
+        3
+      ],
+      "excluded_norm": 13,
+      "H": 4.0,
+      "lhs": [
+        2.566098737090273,
+        0.2852055822395151
+      ],
+      "residual": 5.459600036934242e-15,
+      "truncation_tail_bound": 1.0915694242321527e-40,
+      "omitted_mask_residual": 0.00022076392156530946
+    },
+    {
+      "modulus": [
+        7,
+        3
+      ],
+      "modulus_norm": 37,
+      "excluded_prime": [
+        4,
+        3
+      ],
+      "excluded_norm": 13,
+      "H": 10.0,
+      "lhs": [
+        3.5042743872998745,
+        0.8966845013040922
+      ],
+      "residual": 3.834691684006085e-15,
+      "truncation_tail_bound": 1.228536774380209e-103,
+      "omitted_mask_residual": 0.10101862774039981
+    },
+    {
+      "modulus": [
+        7,
+        3
+      ],
+      "modulus_norm": 37,
+      "excluded_prime": [
+        4,
+        3
+      ],
+      "excluded_norm": 13,
+      "H": 20.0,
+      "lhs": [
+        2.6380587270110616,
+        1.3383751459373128
+      ],
+      "residual": 7.513511730867176e-15,
+      "truncation_tail_bound": 2.026537163961213e-188,
+      "omitted_mask_residual": 0.7729427724534276
+    },
+    {
+      "modulus": [
+        7,
+        3
+      ],
+      "modulus_norm": 37,
+      "excluded_prime": [
+        -2,
+        3
+      ],
+      "excluded_norm": 19,
+      "H": 4.0,
+      "lhs": [
+        2.5659893467229913,
+        0.2850126775851324
+      ],
+      "residual": 4.308824046522781e-15,
+      "truncation_tail_bound": 1.7354816790494393e-27,
+      "omitted_mask_residual": 1.9831865569574575e-06
+    }
+  ],
+  "maximum_absolute_residual": 2.5641345258133027e-14,
+  "all_checks_passed": true
+}
