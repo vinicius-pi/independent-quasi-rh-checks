@@ -1,0 +1,105 @@
+name: Verify arithmetic checks
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Verify arithmetic and integrity
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+
+      - name: Run checker and validate results
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          import math
+          import subprocess
+          from pathlib import Path
+
+          expected_commit = "adc7f1241b42e322a6451854ab7e4b4c146bf78a"
+          protected_hashes = {
+              "check_arithmetic.py": "08ad31f84d508b2161fe40df62b3537d91db1350",
+              "results.json": "e421a2fc6b7bbc34e514203d99da98fc94a5bdfe",
+          }
+          for name in ("README.md", "check_arithmetic.py", "results.json"):
+              if not Path(name).is_file():
+                  raise SystemExit(f"missing repository file: {name}")
+          for name, expected_hash in protected_hashes.items():
+              actual_hash = subprocess.check_output(
+                  ["git", "hash-object", name], text=True
+              ).strip()
+              if actual_hash != expected_hash:
+                  raise SystemExit(f"protected file changed: {name}")
+
+          checker = Path("check_arithmetic.py").read_text(encoding="utf-8")
+          if f'OPENAI_COMMIT = "{expected_commit}"' not in checker:
+              raise SystemExit("checker source commit does not match the pinned manuscript")
+
+          with Path("fresh-results.json").open("w", encoding="utf-8") as output:
+              subprocess.run(
+                  ["python3", "check_arithmetic.py"],
+                  check=True,
+                  stdout=output,
+              )
+          generated = json.loads(Path("fresh-results.json").read_text(encoding="utf-8"))
+          reference = json.loads(Path("results.json").read_text(encoding="utf-8"))
+
+          def compare(actual, expected, path="results"):
+              if isinstance(expected, bool) or isinstance(actual, bool):
+                  if actual != expected:
+                      raise SystemExit(f"{path}: {actual!r} != {expected!r}")
+              elif isinstance(expected, (int, float)) and isinstance(actual, (int, float)):
+                  if not math.isclose(actual, expected, rel_tol=1e-12, abs_tol=1e-12):
+                      raise SystemExit(f"{path}: {actual!r} differs from {expected!r}")
+              elif isinstance(expected, dict) and isinstance(actual, dict):
+                  if set(actual) != set(expected):
+                      raise SystemExit(f"{path}: JSON keys differ")
+                  for key in expected:
+                      compare(actual[key], expected[key], f"{path}.{key}")
+              elif isinstance(expected, list) and isinstance(actual, list):
+                  if len(actual) != len(expected):
+                      raise SystemExit(f"{path}: list lengths differ")
+                  for index, (actual_item, expected_item) in enumerate(zip(actual, expected)):
+                      compare(actual_item, expected_item, f"{path}[{index}]")
+              elif actual != expected:
+                  raise SystemExit(f"{path}: {actual!r} != {expected!r}")
+
+          compare(generated, reference)
+          if generated["source_commit"] != expected_commit:
+              raise SystemExit("generated results use the wrong source commit")
+          if not generated["all_checks_passed"]:
+              raise SystemExit("checker did not report all checks passed")
+          if generated["maximum_absolute_residual"] >= 1e-10:
+              raise SystemExit("maximum residual exceeds the checker tolerance")
+
+          composites = generated["composite_cases"]
+          negative_reciprocity = [
+              case for case in composites
+              if case["reciprocity_sign"] == -1
+          ]
+          if len(negative_reciprocity) != 2:
+              raise SystemExit("expected two negative reciprocity controls")
+          if any(case["omitted_reciprocity_residual"] <= 1 for case in negative_reciprocity):
+              raise SystemExit("reciprocity negative control was not detectable")
+
+          masked = generated["masked_poisson_cases"]
+          if len(masked) != 5:
+              raise SystemExit("expected five masked-Poisson cases")
+          if any(case["omitted_mask_residual"] <= 1e-7 for case in masked):
+              raise SystemExit("excluded-prime negative control was not detectable")
+          if any(case["truncation_tail_bound"] >= 1.8e-27 for case in masked):
+              raise SystemExit("truncation tail envelope exceeds the recorded bound")
+
+          Path("fresh-results.json").unlink()
+          print("Arithmetic checks, toleranced result comparison, negative controls, and integrity checks passed.")
+          PY
